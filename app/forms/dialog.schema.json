@@ -1,0 +1,111 @@
+{
+  "type": "object",
+  "properties": {
+    "dialogName": {
+      "type": "string",
+      "minLength": 3,
+      "title": "Наименивание",
+      "description": "Введите наименивание диалога"
+    },
+    "levels": {
+      "title": "Уровни",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "Наименование",
+            "type": "string"
+          },
+          "levelNum": {
+            "type": "number"
+          },
+          "description": {
+            "title": "Описание",
+            "type": "string"
+          },
+          "topic": {
+            "title": "Робот говорит",
+            "description": "Что должен говорить робот при переходе на данный уровень",
+            "type": "string"
+          },
+          "needExceptCall": {
+            "title": "Необходимо прервать звонок",
+            "description": "Экстренное прерывание звонка",
+            "type": "boolean"
+          },
+          "needCompleteCall": {
+            "title": "Необходимо завершить звонок",
+            "description": "Плановое прерывание звонка",
+            "type": "boolean"
+          },
+          "actor": {
+            "type": "object",
+            "properties": {
+              "exceptionKeywords": {
+                "title": "Фразы исключения",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "actions": {
+                "title": "Действия",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "actionKeywords": {
+                      "type": "string"
+                    },
+                    "onAction": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "vegetarian": {
+      "type": "boolean"
+    },
+    "birthDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "nationality": {
+      "type": "string",
+      "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
+    },
+    "personalData": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "description": "Please enter your age."
+        },
+        "height": {
+          "type": "number"
+        },
+        "drivingSkill": {
+          "type": "number",
+          "maximum": 10,
+          "minimum": 1,
+          "default": 7
+        }
+      },
+      "required": ["age", "height"]
+    },
+    "occupation": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string",
+      "maxLength": 5
+    }
+  },
+  "required": ["occupation", "nationality"]
+}

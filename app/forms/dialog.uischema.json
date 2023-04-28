@@ -1,0 +1,65 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/dialogName"
+        }
+      ]
+    },
+    {
+      "type": "VerticalLayout",
+      "elements": [
+        {
+          "type": "ListWithDetail",
+          "scope": "#/properties/levels",
+          "options": {
+            "elementLabelProp": "title",
+            "showSortButtons": true,
+            "detail": {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/title"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/description"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/topic"
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/needExceptCall"
+                    },
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/needCompleteCall"
+                    }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/actor/properties/exceptionKeywords"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/actor/properties/actions"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
