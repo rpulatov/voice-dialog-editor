@@ -4,7 +4,7 @@
     "dialogName": {
       "type": "string",
       "minLength": 3,
-      "title": "Наименивание",
+      "title": "Наименивание диалога",
       "description": "Введите наименивание диалога"
     },
     "levels": {
@@ -14,10 +14,11 @@
         "type": "object",
         "properties": {
           "title": {
-            "title": "Наименование",
+            "title": "Наименование уровня",
             "type": "string"
           },
           "levelNum": {
+            "title": "Номер уровня",
             "type": "number"
           },
           "description": {
@@ -25,7 +26,7 @@
             "type": "string"
           },
           "topic": {
-            "title": "Робот говорит",
+            "title": "Что говорит робот",
             "description": "Что должен говорить робот при переходе на данный уровень",
             "type": "string"
           },
@@ -40,72 +41,112 @@
             "type": "boolean"
           },
           "actor": {
+            "title": "Действия",
             "type": "object",
             "properties": {
-              "exceptionKeywords": {
-                "title": "Фразы исключения",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
               "actions": {
-                "title": "Действия",
                 "type": "array",
                 "items": {
                   "type": "object",
                   "properties": {
                     "actionKeywords": {
+                      "title": "Слова триггеры",
                       "type": "string"
                     },
                     "onAction": {
+                      "title": "Переход на уровень",
                       "type": "number"
                     }
+                  },
+                  "required": ["actionKeywords", "onAction"]
+                }
+              },
+              "exceptionKeywords": {
+                "title": "Ключевые слова прерывающие звонок",
+                "description": "Плановое прерывание звонка",
+                "type": "string"
+              },
+              "onExcept": {
+                "title": "Переход на уровень",
+                "type": "number"
+              },
+              "mindInterval": {
+                "title": "Время ожидания осмысленных фраз (сек)",
+                "type": "number"
+              },
+              "silenceInterval": {
+                "title": "Время тишины (сек)",
+                "type": "number"
+              },
+              "onSilence": {
+                "title": "Переход на уровень",
+                "type": "number"
+              },
+              "onUnMind": {
+                "title": "Переход на уровень",
+                "type": "number"
+              }
+            },
+            "required": ["actions", "exceptionKeywords"]
+          }
+        },
+        "required": ["title", "topic", "description", "actor"]
+      }
+    },
+    "goals": {
+      "title": "Цели",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Наименование цели",
+            "type": "string"
+          },
+          "steps": {
+            "title": "Шаги",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "title": "Наименование шага",
+                  "type": "string"
+                },
+                "dialogLevel": {
+                  "title": "Уровни диалога на которых достагается шаг (номера через запятую)",
+                  "type": "string"
+                },
+                "increment": {
+                  "title": "На сколько увеличить % достигнутости цели (в поцентах)",
+                  "type": "number"
+                },
+                "decrement": {
+                  "title": "На сколько уменьшить % достигнутости цели (в поцентах)",
+                  "type": "number"
+                },
+                "definitelyValue": {
+                  "title": "Установить значение % достигнутости",
+                  "type": "number"
+                },
+                "checkPatterns": {
+                  "title": "Шаблоны проверки данных",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["NumbersPattern", "PhonePattern"]
                   }
+                },
+                "onPatternMismatch": {
+                  "title": "Перейти на уровень при несоответствии шаблонам",
+                  "type": "number"
                 }
               }
             }
           }
         }
       }
-    },
-    "vegetarian": {
-      "type": "boolean"
-    },
-    "birthDate": {
-      "type": "string",
-      "format": "date"
-    },
-    "nationality": {
-      "type": "string",
-      "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
-    },
-    "personalData": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "description": "Please enter your age."
-        },
-        "height": {
-          "type": "number"
-        },
-        "drivingSkill": {
-          "type": "number",
-          "maximum": 10,
-          "minimum": 1,
-          "default": 7
-        }
-      },
-      "required": ["age", "height"]
-    },
-    "occupation": {
-      "type": "string"
-    },
-    "postalCode": {
-      "type": "string",
-      "maxLength": 5
     }
   },
-  "required": ["occupation", "nationality"]
+  "required": ["dialogName"]
 }

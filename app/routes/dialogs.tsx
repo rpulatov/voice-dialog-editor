@@ -29,8 +29,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function DialogsPage() {
   const data = useLoaderData<typeof loader>();
 
-  console.info({ data });
-
   return (
     <Grid
       container
@@ -53,16 +51,12 @@ export default function DialogsPage() {
               <ListItemText primary="+ Создать новый" />
             </ListItemButton>
             {data.map((item) => (
-              <>
+              <React.Fragment key={item.dialogId}>
                 <Divider variant="middle" component="li" />
-                <ListItemButton
-                  key={item.dialogId}
-                  component={Link}
-                  to={item.dialogId}
-                >
+                <ListItemButton component={Link} to={item.dialogId}>
                   <ListItemText primary={`📝  ${item.dialogName}`} />
                 </ListItemButton>
-              </>
+              </React.Fragment>
             ))}
           </List>
         </Grid>

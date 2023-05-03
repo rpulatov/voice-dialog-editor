@@ -9,22 +9,45 @@ function fetchData<TData>(
 ) {
   const { method = "GET", body } = options ?? {};
 
-  return fetch(`${API_URL}/api${url}`, { method, body }).then((res) => {
-    return res.json().then((data) => {
-      if (res.status !== 200) return Promise.reject(new Error(data.message));
-      return data as TData;
-    });
-  });
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  return fetch(`${API_URL}/api${url}`, { method, body, headers }).then(
+    (res) => {
+      return res.json().then((data) => {
+        if (res.status !== 200) {
+          throw new ApiError(res.statusText, data);
+        }
+        return data as TData;
+      });
+    }
+  );
 }
 
-export type LevelActorAction = {
-  actionKeywords: Array<string>;
+export class ApiError extends Error {
+  errorResponse: ErrorResponse;
+  constructor(statusText: string, errorResponse: ErrorResponse) {
+    super(statusText);
+    this.errorResponse = errorResponse;
+  }
+}
+
+export type ErrorResponse = {
+  type: string;
+  title: string;
+  status: number;
+  traceId: string;
+  errors: { [key: string]: string[] };
+};
+
+export type LevelActorAction<TKeywords> = {
+  actionKeywords: TKeywords;
   onAction: number;
 };
 
-export type LevelActor = {
-  exceptionKeywords: Array<string>;
-  actions: Array<LevelActorAction>;
+export type LevelActor<TKeywords> = {
+  exceptionKeywords: TKeywords;
+  actions: Array<LevelActorAction<TKeywords>>;
   silenceInterval: number;
   mindInterval: number;
   onExcept: number;
@@ -32,14 +55,14 @@ export type LevelActor = {
   onUnMind: number;
 };
 
-export type Level = {
+export type Level<TKeywords> = {
   levelNum: number;
   title: string;
   description: string;
   topic: string;
   needExceptCall: boolean;
   needCompleteCall: boolean;
-  actor: LevelActor;
+  actor: LevelActor<TKeywords>;
 };
 
 export type GoalStep = {
@@ -59,18 +82,20 @@ export type Goal = {
   goalCheckPattern: string;
 };
 
-export type Dialog = {
+export type Dialog<TKeywords> = {
   dialogName: string;
   dialogType: number;
-  levels: Array<Level>;
+  levels: Array<Level<TKeywords>>;
   goals: Array<Goal>;
 };
 
-export type DialogResponse = {
+export type DialogResponse<TKeywords = Array<string>> = {
   dialogId: string;
   dialogName: string;
-  dialog: Dialog;
+  dialog: Dialog<TKeywords>;
 };
+
+export type SaveDialogResponse = { dialogId: number; saved: boolean };
 
 export function getDialogList() {
   return fetchData<DialogResponse[]>(`/GetDialogList`);
@@ -78,4 +103,63 @@ export function getDialogList() {
 
 export function getDialog(id: string) {
   return fetchData<DialogResponse>(`/getdialog?dialogId=${id}`);
+}
+
+export function saveDialog(dialog: DialogResponse) {
+  console.info(JSON.stringify(dialog.dialog));
+  return fetchData<SaveDialogResponse>(
+    `/SaveDialog?dialogId=${dialog.dialogId}`,
+    {
+      method: "POST",
+      body: JSON.stringify(dialog.dialog),
+    }
+  );
+}
+
+export function createNewDialog(): DialogResponse {
+  return {
+    dialogId: "",
+    dialogName: "",
+    dialog: { dialogName: "", dialogType: 1, levels: [], goals: [] },
+  };
+}
+
+export function transformToForm(
+  data: DialogResponse<Array<string>>
+): DialogResponse<string> {
+  return JSON.parse(JSON.stringify(data), (key, value) => {
+    if (
+      ["exceptionKeywords", "actionKeywords", "dialogLevel"].includes(key) &&
+      Array.isArray(value)
+    )
+      return value.join(",");
+
+    if (
+      ["mindInterval", "silenceInterval"].includes(key) &&
+      typeof value === "number"
+    )
+      return value / 1000;
+
+    return value;
+  });
+}
+
+export function transformToData(
+  data: DialogResponse<string>
+): DialogResponse<Array<string>> {
+  return JSON.parse(JSON.stringify(data), (key, value) => {
+    if (
+      ["exceptionKeywords", "actionKeywords", "dialogLevel"].includes(key) &&
+      typeof value === "string"
+    )
+      return value.split(",");
+
+    if (
+      ["mindInterval", "silenceInterval"].includes(key) &&
+      typeof value === "number"
+    )
+      return value * 1000;
+
+    return value;
+  });
 }

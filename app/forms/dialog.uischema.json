@@ -11,53 +11,195 @@
       ]
     },
     {
-      "type": "VerticalLayout",
+      "type": "Categorization",
       "elements": [
         {
-          "type": "ListWithDetail",
-          "scope": "#/properties/levels",
-          "options": {
-            "elementLabelProp": "title",
-            "showSortButtons": true,
-            "detail": {
+          "type": "Category",
+          "label": "Уровни",
+          "elements": [
+            {
               "type": "VerticalLayout",
               "elements": [
                 {
-                  "type": "Control",
-                  "scope": "#/properties/title"
-                },
-                {
-                  "type": "Control",
-                  "scope": "#/properties/description"
-                },
-                {
-                  "type": "Control",
-                  "scope": "#/properties/topic"
-                },
-                {
-                  "type": "HorizontalLayout",
-                  "elements": [
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/needExceptCall"
-                    },
-                    {
-                      "type": "Control",
-                      "scope": "#/properties/needCompleteCall"
+                  "type": "ListWithDetail2",
+                  "scope": "#/properties/levels",
+                  "options": {
+                    "elementLabelProp": "title",
+                    "showSortButtons": true,
+                    "detail": {
+                      "type": "VerticalLayout",
+                      "elements": [
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "scope": "#/properties/title"
+                            },
+                            {
+                              "type": "Control",
+                              "scope": "#/properties/levelNum"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Control",
+                          "scope": "#/properties/description"
+                        },
+                        {
+                          "type": "Control",
+                          "scope": "#/properties/topic"
+                        },
+                        {
+                          "type": "HorizontalLayout",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "scope": "#/properties/needExceptCall"
+                            },
+                            {
+                              "type": "Control",
+                              "scope": "#/properties/needCompleteCall"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Group",
+                          "elements": [
+                            {
+                              "type": "Control",
+                              "scope": "#/properties/actor/properties/actions"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Group",
+                          "elements": [
+                            {
+                              "type": "HorizontalLayout",
+                              "elements": [
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/actor/properties/exceptionKeywords"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/actor/properties/onExcept"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Group",
+                          "elements": [
+                            {
+                              "type": "HorizontalLayout",
+                              "elements": [
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/actor/properties/mindInterval"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/actor/properties/onUnMind"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Group",
+                          "elements": [
+                            {
+                              "type": "HorizontalLayout",
+                              "elements": [
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/actor/properties/silenceInterval"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/actor/properties/onSilence"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
                     }
-                  ]
-                },
-                {
-                  "type": "Control",
-                  "scope": "#/properties/actor/properties/exceptionKeywords"
-                },
-                {
-                  "type": "Control",
-                  "scope": "#/properties/actor/properties/actions"
+                  }
                 }
               ]
             }
-          }
+          ]
+        },
+        {
+          "type": "Category",
+          "label": "Цели",
+          "elements": [
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "ListWithDetail",
+                  "scope": "#/properties/goals",
+                  "options": {
+                    "elementLabelProp": "title",
+                    "showSortButtons": true,
+                    "detail": {
+                      "type": "VerticalLayout",
+                      "elements": [
+                        {
+                          "type": "Control",
+                          "scope": "#/properties/name"
+                        },
+                        {
+                          "type": "Control",
+                          "scope": "#/properties/steps",
+                          "options": {
+                            "detail": {
+                              "type": "VerticalLayout",
+                              "elements": [
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/name"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/dialogLevel"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/increment"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/decrement"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/definitelyValue"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/checkPatterns"
+                                },
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/onPatternMismatch"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }
