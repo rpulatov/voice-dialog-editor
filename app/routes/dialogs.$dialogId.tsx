@@ -7,7 +7,7 @@ import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { ApiError, Dialog } from "~/models/dialog.server";
 import { saveDialog } from "~/models/dialog.server";
@@ -26,6 +26,9 @@ import {
   MaterialListWithDetailRenderer,
   materialListWithDetailTester,
 } from "~/shared/components/additional";
+// import LevelsDiagram from "~/shared/components/LevelsDiagram";
+
+let LevelsDiagram = lazy(() => import("~/shared/components/LevelsDiagram"));
 
 const renderers = [
   ...materialRenderers,
@@ -136,6 +139,9 @@ export default function DialogItem() {
   console.info({ actionData });
   return (
     <Box p={4}>
+      <Suspense fallback="">
+        <LevelsDiagram data={data.levels} />
+      </Suspense>
       <Paper>
         <Box p={2}>
           {actionData ? (
