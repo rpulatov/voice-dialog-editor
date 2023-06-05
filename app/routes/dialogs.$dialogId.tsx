@@ -9,7 +9,8 @@ import { json } from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { ApiError, Dialog } from "~/models/dialog.server";
+
+import type { Dialog } from "~/models/dialog.server";
 import { saveDialog } from "~/models/dialog.server";
 import isEqual from "lodash.isequal";
 import {
@@ -26,6 +27,8 @@ import {
   MaterialListWithDetailRenderer,
   materialListWithDetailTester,
 } from "~/shared/components/additional";
+import { ApiError } from "~/proxy.server";
+import { getPhrases } from "~/models/phrases.server";
 // import LevelsDiagram from "~/shared/components/LevelsDiagram";
 
 let LevelsDiagram = lazy(() => import("~/shared/components/LevelsDiagram"));
@@ -50,7 +53,21 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   if (!dialog) {
     throw new Response("Not Found", { status: 404 });
   }
-  return json(transformToForm(dialog));
+  const phrases = await getPhrases();
+
+  return json({
+    dialog: transformToForm(dialog),
+    phrases: [
+      {
+        const: 0,
+        title: "Отсутствует озвучиваемый текст",
+      },
+      ...phrases.map((phrase) => ({
+        const: phrase.id,
+        title: phrase.content,
+      })),
+    ],
+  });
 };
 
 export const action = async ({ request }: ActionArgs) => {
@@ -92,7 +109,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export default function DialogItem() {
-  const initialData = useLoaderData<typeof loader>();
+  const { dialog: initialData, phrases } = useLoaderData<typeof loader>();
   const actionData = useActionData<{ errors: { [key: string]: string[] } }>();
   const submit = useSubmit();
 
@@ -136,7 +153,6 @@ export default function DialogItem() {
     setData(initialData.dialog);
   }, [initialData]);
 
-  console.info({ actionData });
   return (
     <Box p={4}>
       <Suspense fallback="">
@@ -154,7 +170,16 @@ export default function DialogItem() {
             </Stack>
           ) : null}
           <JsonForms
-            schema={schema}
+            schema={{
+              ...schema,
+              definitions: {
+                track: {
+                  title: "Аудиотрек, который говорит робот",
+                  type: "number",
+                  oneOf: phrases,
+                },
+              },
+            }}
             uischema={uischema}
             data={data}
             renderers={renderers}

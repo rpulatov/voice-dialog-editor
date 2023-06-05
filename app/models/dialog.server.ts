@@ -1,44 +1,4 @@
-const API_URL = process.env.API_URL;
-
-function fetchData<TData>(
-  url: string,
-  options?: {
-    method?: "GET" | "POST";
-    body?: BodyInit;
-  }
-) {
-  const { method = "GET", body } = options ?? {};
-
-  const headers = new Headers();
-  headers.append("Content-Type", "application/json");
-
-  return fetch(`${API_URL}/api${url}`, { method, body, headers }).then(
-    (res) => {
-      return res.json().then((data) => {
-        if (res.status !== 200) {
-          throw new ApiError(res.statusText, data);
-        }
-        return data as TData;
-      });
-    }
-  );
-}
-
-export class ApiError extends Error {
-  errorResponse: ErrorResponse;
-  constructor(statusText: string, errorResponse: ErrorResponse) {
-    super(statusText);
-    this.errorResponse = errorResponse;
-  }
-}
-
-export type ErrorResponse = {
-  type: string;
-  title: string;
-  status: number;
-  traceId: string;
-  errors: { [key: string]: string[] };
-};
+import { fetchData } from "~/proxy.server";
 
 export type LevelActorAction<TKeywords> = {
   actionKeywords: TKeywords;
@@ -47,6 +7,7 @@ export type LevelActorAction<TKeywords> = {
 
 export type LevelActor<TKeywords> = {
   exceptionKeywords: TKeywords;
+  mindKeywords: TKeywords;
   actions: Array<LevelActorAction<TKeywords>>;
   silenceInterval: number;
   mindInterval: number;
@@ -60,6 +21,7 @@ export type Level<TKeywords> = {
   title: string;
   description: string;
   topic: string;
+  track: number;
   needExceptCall: boolean;
   needCompleteCall: boolean;
   actor: LevelActor<TKeywords>;
@@ -106,7 +68,6 @@ export function getDialog(id: string) {
 }
 
 export function saveDialog(dialog: DialogResponse) {
-  console.info(JSON.stringify(dialog.dialog));
   return fetchData<SaveDialogResponse>(
     `/SaveDialog?dialogId=${dialog.dialogId}`,
     {
@@ -124,20 +85,22 @@ export function createNewDialog(): DialogResponse {
   };
 }
 
+const KEYS_FOR_JOIN = [
+  "exceptionKeywords",
+  "mindKeywords",
+  "actionKeywords",
+  "dialogLevel",
+];
+const KEYS_FOR_TIMER = ["mindInterval", "silenceInterval"];
+
 export function transformToForm(
   data: DialogResponse<Array<string>>
 ): DialogResponse<string> {
   return JSON.parse(JSON.stringify(data), (key, value) => {
-    if (
-      ["exceptionKeywords", "actionKeywords", "dialogLevel"].includes(key) &&
-      Array.isArray(value)
-    )
+    if (KEYS_FOR_JOIN.includes(key) && Array.isArray(value))
       return value.join(",");
 
-    if (
-      ["mindInterval", "silenceInterval"].includes(key) &&
-      typeof value === "number"
-    )
+    if (KEYS_FOR_TIMER.includes(key) && typeof value === "number")
       return value / 1000;
 
     return value;
@@ -148,16 +111,10 @@ export function transformToData(
   data: DialogResponse<string>
 ): DialogResponse<Array<string>> {
   return JSON.parse(JSON.stringify(data), (key, value) => {
-    if (
-      ["exceptionKeywords", "actionKeywords", "dialogLevel"].includes(key) &&
-      typeof value === "string"
-    )
+    if (KEYS_FOR_JOIN.includes(key) && typeof value === "string")
       return value.split(",");
 
-    if (
-      ["mindInterval", "silenceInterval"].includes(key) &&
-      typeof value === "number"
-    )
+    if (KEYS_FOR_TIMER.includes(key) && typeof value === "number")
       return value * 1000;
 
     return value;

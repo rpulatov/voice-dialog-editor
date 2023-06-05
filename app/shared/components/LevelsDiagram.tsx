@@ -25,9 +25,7 @@ const LevelsDiagram = React.memo(
     const maxLength = 30;
 
     const levelsObject = data.reduce((acc, level) => {
-      let name = `(${level.levelNum}) - ${
-        level.topic.trim() ? level.topic : level.title
-      }`;
+      let name = `(${level.levelNum}) - ${level.title}`;
 
       if (name.length > maxLength) {
         name = name.substring(0, maxLength) + "...";

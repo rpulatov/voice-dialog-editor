@@ -48,7 +48,7 @@
                         },
                         {
                           "type": "Control",
-                          "scope": "#/properties/topic"
+                          "scope": "#/properties/track"
                         },
                         {
                           "type": "HorizontalLayout",
@@ -96,6 +96,10 @@
                             {
                               "type": "HorizontalLayout",
                               "elements": [
+                                {
+                                  "type": "Control",
+                                  "scope": "#/properties/actor/properties/mindKeywords"
+                                },
                                 {
                                   "type": "Control",
                                   "scope": "#/properties/actor/properties/mindInterval"

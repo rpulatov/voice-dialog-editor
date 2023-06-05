@@ -30,6 +30,9 @@
             "description": "Что должен говорить робот при переходе на данный уровень",
             "type": "string"
           },
+          "track": {
+            "$ref": "#/definitions/track"
+          },
           "needExceptCall": {
             "title": "Необходимо прервать звонок",
             "description": "Экстренное прерывание звонка",
@@ -41,10 +44,10 @@
             "type": "boolean"
           },
           "actor": {
-            "title": "Действия",
             "type": "object",
             "properties": {
               "actions": {
+                "title": "Действия",
                 "type": "array",
                 "items": {
                   "type": "object",
@@ -66,17 +69,26 @@
                 "description": "Плановое прерывание звонка",
                 "type": "string"
               },
+              "mindKeywords": {
+                "title": "Ключевые слова продлевающие звонок",
+                "description": "",
+                "type": "string"
+              },
               "onExcept": {
                 "title": "Переход на уровень",
                 "type": "number"
               },
               "mindInterval": {
                 "title": "Время ожидания осмысленных фраз (сек)",
-                "type": "number"
+                "type": "number",
+                "maximum": 30,
+                "minimum": 1
               },
               "silenceInterval": {
                 "title": "Время тишины (сек)",
-                "type": "number"
+                "type": "number",
+                "maximum": 30,
+                "minimum": 1
               },
               "onSilence": {
                 "title": "Переход на уровень",
