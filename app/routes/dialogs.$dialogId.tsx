@@ -64,7 +64,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       },
       ...phrases.map((phrase) => ({
         const: phrase.id,
-        title: phrase.content,
+        title: `${phrase.id} - ${phrase.content}`,
       })),
     ],
   });
