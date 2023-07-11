@@ -1,0 +1,22 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "id",
+          "scope": "#/properties/id"
+        },
+        {
+          "type": "file",
+          "scope":"#/properties/file"
+        },
+        {
+          "type": "content",
+          "scope":"#/properties/content"
+        }        
+      ]
+    }
+  ]
+}
