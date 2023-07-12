@@ -2,8 +2,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "type": "number",
-      "minLength": 33
+      "type": "number"
     },
     "file": {
       "type": "string"

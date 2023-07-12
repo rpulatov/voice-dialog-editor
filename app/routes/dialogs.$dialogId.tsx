@@ -84,7 +84,7 @@ export const action = async ({ request }: ActionArgs) => {
   let data;
   try {
     data = JSON.parse(rawBody);
-  } catch {}
+  } catch { }
 
   if (!data)
     throw json("Malformed JSON body: could not parse", { status: 400 });

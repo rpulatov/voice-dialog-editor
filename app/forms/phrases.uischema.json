@@ -5,15 +5,15 @@
       "type": "HorizontalLayout",
       "elements": [
         {
-          "type": "id",
+          "type": "Control",
           "scope": "#/properties/id"
         },
         {
-          "type": "file",
+          "type": "Control",
           "scope":"#/properties/file"
         },
         {
-          "type": "content",
+          "type": "Control",
           "scope":"#/properties/content"
         }        
       ]
