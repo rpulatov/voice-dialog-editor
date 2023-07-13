@@ -25,11 +25,6 @@
             "title": "Описание",
             "type": "string"
           },
-          "topic": {
-            "title": "Что говорит робот",
-            "description": "Что должен говорить робот при переходе на данный уровень",
-            "type": "string"
-          },
           "track": {
             "$ref": "#/definitions/track"
           },

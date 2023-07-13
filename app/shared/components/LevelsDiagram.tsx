@@ -41,10 +41,13 @@ const LevelsDiagram = React.memo(
     }, new Map<number, { data: Level<string>; node: DefaultNodeModel }>());
 
     const rangY: number[] = [];
+    const processedLevels: number[] = [];
 
     function doLevel(levelNum: number, rangX: number) {
       const levelObject = levelsObject.get(levelNum);
-      if (!levelObject) return;
+      if (!levelObject || processedLevels.includes(levelNum)) return;
+
+      processedLevels.push(levelNum);
 
       rangY[rangX] = rangY[rangX] ?? 0;
 
@@ -70,7 +73,7 @@ const LevelsDiagram = React.memo(
 
     doLevel(0, 0);
 
-    model.setLocked(true);
+    // model.setLocked(true);
     engine.setModel(model);
 
     return <CanvasWidget engine={engine} className="h-72 w-full" />;
