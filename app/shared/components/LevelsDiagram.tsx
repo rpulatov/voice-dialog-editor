@@ -54,7 +54,7 @@ const LevelsDiagram = React.memo(
       rangY[rangX] += 1;
       const nextRangX = rangX + 1;
 
-      levelObject.data.actor.actions.forEach((action) => {
+      levelObject.data.actor?.actions.forEach((action) => {
         const levelObjectIn = levelsObject.get(action.onAction);
         if (levelObjectIn) {
           doLevel(action.onAction, nextRangX);
