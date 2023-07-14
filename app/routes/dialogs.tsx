@@ -28,7 +28,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function DialogsPage() {
   const data = useLoaderData<typeof loader>();
-
   return (
     <Grid
       container

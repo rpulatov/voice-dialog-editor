@@ -45,6 +45,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   invariant(params.dialogId, "dialogId not found");
 
   let dialog = null;
+
   if (params.dialogId === "new") {
     dialog = createNewDialog();
   } else {
@@ -109,6 +110,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export default function DialogItem() {
+
   const { dialog: initialData, phrases } = useLoaderData<typeof loader>();
   const actionData = useActionData<{ errors: { [key: string]: string[] } }>();
   const submit = useSubmit();
@@ -132,7 +134,6 @@ export default function DialogItem() {
     },
     [initialData]
   );
-
   const onSave = useCallback(
     (draftData: Dialog<string>) => {
       submit(
@@ -152,7 +153,7 @@ export default function DialogItem() {
   useEffect(() => {
     setData(initialData.dialog);
   }, [initialData]);
-
+  console.log(initialData);
   return (
     <Box p={4}>
       <Suspense fallback="">

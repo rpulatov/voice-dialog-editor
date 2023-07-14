@@ -60,7 +60,7 @@ export default function PhrasesPage() {
             {data.map((item) => (
               <React.Fragment key={item.id}>
                 <Divider variant="middle" component="li" />
-                <ListItemButton component={Link} to={item.id}>
+                <ListItemButton component={Link} to={String(item.id)}>
                   <ListItemText primary={`📝  ${item.content}`} />
                 </ListItemButton>
               </React.Fragment>
