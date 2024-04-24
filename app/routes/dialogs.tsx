@@ -22,8 +22,34 @@ import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import React from "react";
 import { getDialogList } from "~/models/dialog.server";
 
+const isAuthorized = (request: Request) => {
+  const header = request.headers.get("Authorization");
+
+  if (!header) return false;
+
+  const base64 = header.replace("Basic ", "");
+  const [username, password] = Buffer.from(base64, "base64")
+    .toString()
+    .split(":");
+
+  return (
+    username === process.env.FRONT_USER && password === process.env.FRONT_PASS
+  );
+};
+
 export const loader = async ({ request }: LoaderArgs) => {
-  return json(await getDialogList());
+  if (!isAuthorized(request)) {
+    return json({ dialogs: [] }, { status: 401 });
+  }
+  const dialogs = await getDialogList();
+
+  return json({ dialogs });
+};
+
+export const headers = () => {
+  return {
+    "WWW-Authenticate": "Basic",
+  };
 };
 
 export default function DialogsPage() {
@@ -50,7 +76,7 @@ export default function DialogsPage() {
             <ListItemButton component={Link} to="new">
               <ListItemText primary="+ Создать новый" />
             </ListItemButton>
-            {data.map((item) => (
+            {data.dialogs.map((item) => (
               <React.Fragment key={item.dialogId}>
                 <Divider variant="middle" component="li" />
                 <ListItemButton component={Link} to={item.dialogId}>

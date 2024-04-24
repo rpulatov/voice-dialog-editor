@@ -9,9 +9,15 @@ export function fetchData<TData>(
 ) {
   const { method = "GET", body } = options ?? {};
 
+  const token = Buffer.from(
+    `${process.env.API_USER}:${process.env.API_PASS}`
+  ).toString("base64");
+
+  console.info({ token, u: process.env.API_USER, p: process.env.API_PASS });
+
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
-
+  headers.append("Authorization", `Basic ${token}`);
   return fetch(`${API_URL}${url}`, { method, body, headers }).then((res) => {
     return res.json().then((data) => {
       if (res.status !== 200) {
