@@ -1,33 +1,50 @@
 import {
   AppBar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Container,
   Divider,
   Grid,
   List,
-  ListItem,
   ListItemButton,
   ListItemText,
-  Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
-import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { LoaderFunction, json } from "@remix-run/node";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import React from "react";
 import { getDialogList } from "~/models/dialog.server";
 
-export const loader = async ({ request }: LoaderArgs) => {
-  return json(await getDialogList());
+const isAuthorized = (request: Request) => {
+  const header = request.headers.get("Authorization");
+
+  if (!header) return false;
+
+  const base64 = header.replace("Basic ", "");
+  const [username, password] = Buffer.from(base64, "base64")
+    .toString()
+    .split(":");
+
+  console.info({ username, password });
+  return username === "test" && password === "test";
 };
+
+export const loader: LoaderFunction = async ({ request }) => {
+  if (!isAuthorized(request)) {
+    return json({ authorized: false, dialogs: [] }, { status: 401 });
+  }
+
+  const dialogs = await getDialogList();
+
+  return json({ authorized: true, dialogs });
+};
+
+export const headers = () => ({
+  "WWW-Authenticate": "Basic",
+});
 
 export default function DialogsPage() {
   const data = useLoaderData<typeof loader>();
+
+  if (data.authorized === false) return null;
 
   return (
     <Grid
@@ -50,7 +67,7 @@ export default function DialogsPage() {
             <ListItemButton component={Link} to="new">
               <ListItemText primary="+ Создать новый" />
             </ListItemButton>
-            {data.map((item) => (
+            {data.dialogs.map((item) => (
               <React.Fragment key={item.dialogId}>
                 <Divider variant="middle" component="li" />
                 <ListItemButton component={Link} to={item.dialogId}>

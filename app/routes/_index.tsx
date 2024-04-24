@@ -1,5 +1,4 @@
-import { redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { redirect, useLoaderData } from "@remix-run/react";
 
 export async function loader() {
   return redirect("/dialogs");

@@ -3,22 +3,25 @@ import {
   materialRenderers,
 } from "@jsonforms/material-renderers";
 import { JsonForms } from "@jsonforms/react";
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import {
+  redirect,
+  json,
+  LoaderFunction,
+  ActionFunction,
+} from "@remix-run/node";
 import { useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 
 import type { Dialog } from "~/models/dialog.server";
-import { saveDialog } from "~/models/dialog.server";
-import isEqual from "lodash.isequal";
 import {
+  saveDialog,
   getDialog,
   transformToForm,
   transformToData,
   createNewDialog,
 } from "~/models/dialog.server";
+import isEqual from "lodash.isequal";
 
 import schema from "../forms/dialog.schema.json";
 import uischema from "../forms/dialog.uischema.json";
@@ -31,7 +34,7 @@ import { ApiError } from "~/proxy.server";
 import { getPhrases } from "~/models/phrases.server";
 // import LevelsDiagram from "~/shared/components/LevelsDiagram";
 
-let LevelsDiagram = lazy(() => import("~/shared/components/LevelsDiagram"));
+const LevelsDiagram = lazy(() => import("~/shared/components/LevelsDiagram"));
 
 const renderers = [
   ...materialRenderers,
@@ -41,7 +44,7 @@ const renderers = [
   },
 ];
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.dialogId, "dialogId not found");
 
   let dialog = null;
@@ -70,7 +73,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   });
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const rawBody = form.get("body");
 
@@ -84,7 +87,9 @@ export const action = async ({ request }: ActionArgs) => {
   let data;
   try {
     data = JSON.parse(rawBody);
-  } catch {}
+  } catch {
+    /* empty */
+  }
 
   if (!data)
     throw json("Malformed JSON body: could not parse", { status: 400 });
@@ -184,7 +189,7 @@ export default function DialogItem() {
             data={data}
             renderers={renderers}
             cells={materialCells}
-            onChange={({ data, errors }) => onChange(data)}
+            onChange={({ data }) => onChange(data)}
           />
           <ButtonGroup>
             <Button
