@@ -11,6 +11,10 @@ export function fetchData<TData>(
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
+  headers.append(
+    "Authorization",
+    "Basic VXNlcjomJipeIyQlTEtOTE5KPigpVSopKEtOSktKTkhMSyomJmtqa2hma3NkNDMoKSpra2xmZiU="
+  );
 
   return fetch(`${API_URL}${url}`, { method, body, headers }).then((res) => {
     return res.json().then((data) => {

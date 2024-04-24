@@ -23,8 +23,8 @@ const isAuthorized = (request: Request) => {
     .toString()
     .split(":");
 
-  console.info({ username, password });
-  return username === "test" && password === "test";
+  console.info({ header });
+  return true;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {

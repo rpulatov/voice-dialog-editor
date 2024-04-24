@@ -11,9 +11,11 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@jsonforms/core": "^3.2.1",
     "@jsonforms/material-renderers": "^3.2.1",
     "@jsonforms/react": "^3.2.1",
     "@mui/material": "^5.15.15",
+    "@projectstorm/react-diagrams": "^7.0.4",
     "@remix-run/css-bundle": "^2.9.0",
     "@remix-run/node": "^2.9.0",
     "@remix-run/react": "^2.9.0",

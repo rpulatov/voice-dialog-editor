@@ -8,12 +8,11 @@ import {
 } from "@remix-run/react";
 import { cssBundleHref } from "@remix-run/css-bundle";
 
-import tailwindStylesheetUrl from "~/styles/tailwind.css";
+// import tailwindStylesheetUrl from "~/styles/tailwind.css";
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: tailwindStylesheetUrl },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+// export const links: LinksFunction = () => [
+//   { rel: "stylesheet", href: tailwindStylesheetUrl },
+// ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
