@@ -1,0 +1,18 @@
+version: "3"
+services:
+  voice-dialog-editor:
+    build: .
+    image: voice-dialog-editor-image
+    container_name: voice-dialog-editor
+    restart: always
+    ports: 
+      - "8000:8000"
+    environment:
+      - API_URL=${API_URL}
+      - PORT=8000
+      - HOST=0.0.0.0
+      - NODE_ENV=production
+      - API_USER=${API_USER}
+      - API_PASS=${API_PASS}
+      - FRONT_USER=${FRONT_USER}
+      - FRONT_PASS=${FRONT_PASS}
